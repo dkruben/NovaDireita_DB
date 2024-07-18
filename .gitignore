@@ -9,8 +9,7 @@ test/v_1.py
 .idea/encodings.xml
 .idea/inspectionProfiles/Project_Default.xml
 .idea/inspectionProfiles/profiles_settings.xml
-!/python_src_orig/
-!/dist/
-!/build/
-!/.idea/
-!/build_x86/Output/
+python_src_orig/
+dist/
+build/
+build_x86/Output/
