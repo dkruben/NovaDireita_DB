@@ -2,38 +2,51 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 [Setup]
-; NOTE: The value of AppId uniquely identifies this application.
-; Do not use the same AppId value in installers for other applications.
-; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{YOUR-GUID-HERE}}
-AppName=Nova Direita - Gest�o de Militantes
+AppId={{20240101-ABCD-1234-EFGH-5678IJKLMNOP}}
+AppName=Nova Direita - Gestão de Militantes
 AppVersion=1.0
+AppCopyright=©Nova Direita 2024
 DefaultDirName={autopf}\Nova Direita
 DefaultGroupName=Nova Direita
 OutputBaseFilename=NovaDireita-Instalador
 Compression=lzma
 SolidCompression=yes
-SetupIconFile=icon\logo.ico
+SetupIconFile=..\src_files\logos\logo.ico
 ShowLanguageDialog=yes
-AppCopyright=�Nova Direita 2024
+; LicenseFile=License.txt
+MinVersion=6.1
+; SignTool=signtool sign /f "path\to\your\certificate.pfx" /p YourPassword /t http://timestamp.digicert.com $f
+SignedUninstaller=no
+VersionInfoVersion=1.0.0.0
+VersionInfoCompany=Nova Direita
+VersionInfoDescription=Gestão de Militantes
+VersionInfoCopyright=@Nova Direita 2024
+VersionInfoProductName=Nova Direita - Gestão de Militantes
+VersionInfoProductVersion=1.0.0.0
+SetupLogging=yes
+; LogFile={app}\install.log
+UninstallDisplayIcon={app}\Nova Direita.exe
+UninstallLogMode=append
 
 [Languages]
-Name: "portuguese"; MessagesFile: "compiler:Default.isl"
+Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
+Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "dist\NovaDireita.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "icon\logo.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "icon\logo.ico"; DestDir: "{app}\icon"; Flags: ignoreversion
-Source: "icon\nova_direita.png"; DestDir: "{app}\icon"; Flags: ignoreversion
-Source: "pdf\Principios.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
-Source: "pdf\Estatutos.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
-Source: "pdf\IBAN.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
-Source: "militantes.log"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\dist\Nova Direita.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src_files\logos\logo.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src_files\logos\nova_direita.png"; DestDir: "{app}\logos"; Flags: ignoreversion
+Source: "..\src_files\pdf\Principios.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
+Source: "..\src_files\pdf\Estatutos.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
+Source: "..\src_files\pdf\IBAN.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\Nova Direita"; Filename: "{app}\NovaDireita.exe"; IconFilename: "{app}\logo.ico"
+Name: "{group}\Nova Direita"; Filename: "{app}\Nova Direita.exe"; IconFilename: "{app}\logo.ico"
 Name: "{group}\Uninstall Nova Direita"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\Nova Direita"; Filename: "{app}\NovaDireita.exe"; IconFilename: "{app}\logo.ico"
+Name: "{commondesktop}\Nova Direita"; Filename: "{app}\Nova Direita.exe"; IconFilename: "{app}\logo.ico"
 
 [Run]
-Filename: "{app}\NovaDireita.exe"; Description: "{cm:LaunchProgram, Nova Direita}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Nova Direita.exe"; Description: "{cm:LaunchProgram,Nova Direita}"; Flags: nowait postinstall skipifsilent
+
+[UninstallDelete]
+Type: files; Name: "{app}\install.log"

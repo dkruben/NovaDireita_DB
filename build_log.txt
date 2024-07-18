@@ -1,5 +1,0 @@
-17-07-2024 04:32:55 - Removing previous build and dist directories
-17-07-2024 04:32:55 - Getting Python installation directory
-17-07-2024 04:32:55 - Running py_to_exe.py to generate spec file
-17-07-2024 04:32:55 - Running PyInstaller with generated spec file
-17-07-2024 04:34:00 - Build process completed.

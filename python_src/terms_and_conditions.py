@@ -1,0 +1,15 @@
+text_rgpd = (
+    'Responsável pelo tratamento: Partido Nova Direita, com sede na Av. António Serpa 32 8b, 1050-027 Lisboa, Portugal; tlf: 217 961 260; email: todosjuntos@novadireita.pt. \n\n'
+    'Finalidade do tratamento: inscrição e gestão da condição de militante na ND, cujo fundamento de licitude é o artigo 9.º, n.º 2, alínea d), do Regulamento Geral sobre a Proteção de Dados.\n\n'
+    'Podem os dados pessoais do militante ser objeto de processamento informático e de utilização no âmbito das atividades das estruturas internas e autónomas e diferentes candidaturas eleitorais\n'
+    'internas de militantes recebidas, nos termos dos Estatutos e dos Regulamentos Eleitorais do Partido Nova Direita,\n'
+    'com a garantia de não serem divulgados a outras entidades para outras atividades que não se enquadrem no âmbito das atividades do Partido.\n'
+    'Caso se venha a equacionar a cedência de dados a terceiros para uma finalidade legítima, tal carecerá sempre da obtenção prévia do consentimento do militante.\n\n'
+    'Prazo de conservação: os seus dados serão conservados enquanto perdurar a condição de militante e, caso se aplique alguma\nnorma estatutária ou regulamentar que implique a conservação dos dados para lá desse momento,\n'
+    'nomeadamente de ordem disciplinar, até ao final do prazo estatutariamente ou em regulamento previsto para a efetivação dessa norma.\n\n'
+    'Direitos dos titulares: O titular dos dados pode exercer os seus direitos de acesso, retificação, oposição, eliminação ou limitação dos seus dados pessoais, nos termos do RGPD, devendo,\n'
+    'para o efeito, remeter o seu pedido, por escrito, para militantes@novadireita.pt.\n\n'
+    'Encarregado de Proteção de Dados: Em cumprimento do RGPD, o Encarregado da Proteção de Dados pode ser\ncontactado através do endereço eletrónico militantes@novadireita.pt.\n\n'
+    'Direito de queixa: caso assim o entenda, o titular dos dados tem o direito de apresentar queixa junto da\nautoridade de controlo nacional, a Comissão Nacional de Proteção de Dados. Declaro sob compromisso de honra\n\n'
+    'que todos os dados indicados aqui correspondem à verdade e que não me encontro numa das situações\nprevistas na Lei, nos Estatutos Nacionais do Partido e dos seus Regulamentos internos que impossibilitem a minha inscrição.'
+)

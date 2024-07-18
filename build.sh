@@ -20,11 +20,11 @@ PYTHON_DIR=$(python py_to_exe.py | tr -d '\r')
 
 # Run the py_to_exe.py script to generate the PyInstaller spec file
 write_log "Running py_to_exe.py to generate spec file"
-"$PYTHON_DIR/python.exe" python_src/py_to_exe.py
+"$PYTHON_DIR/python.exe" py_to_exe.py
 
 # Run PyInstaller with the generated spec file
 write_log "Running PyInstaller with generated spec file"
-pyinstaller python_src/NovaDireita.spec
+pyinstaller Nova Direita.spec
 
 # Display completion message and log it
 echo "Build process completed."
