@@ -13,3 +13,9 @@ python_src_orig/
 dist/
 build/
 build_x86/Output/
+python_src/__pycache__/users.cpython-312.pyc
+python_src/__pycache__/print_pdf.cpython-312.pyc
+python_src/__pycache__/constants.cpython-312.pyc
+python_src/__pycache__/database.cpython-312.pyc
+python_src/__pycache__/loggin_setup.cpython-312.pyc
+python_src/__pycache__/terms_and_conditions.cpython-312.pyc

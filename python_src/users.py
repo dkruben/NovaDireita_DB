@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import ssl
+import mysql.connector
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -15,10 +16,10 @@ from print_pdf import PrintPdf
 
 
 class Users(object):
-    def __init__(self, idUser=0, name='', address='', city='', district='', cep='', phone='', nif='', cc='', aniversario=None, email='', available=''):
+    def __init__(self, idUser=0, name='', address='', city='', district='', cep='', phone='', nif='', cc='', cc_exp='', aniversario=None, email='', available=''):
         logger.info(f"Criar um novo Militante: {name}")
         self.conn = DataBase().conn
-        self.info = {}
+        # self.info = {}
         self.idUser = idUser
         self.name = name
         self.address = address
@@ -28,6 +29,7 @@ class Users(object):
         self.phone = phone
         self.nif = nif
         self.cc = cc
+        self.cc_exp = cc_exp
         self.calendar_date = aniversario
         self.email = email
         self.available = available
@@ -43,25 +45,30 @@ class Users(object):
         logger.info(f"Adicionar Militante na base de dados: {self.name}")
         try:
             c = self.conn.cursor()
-            c.execute(
-                'INSERT INTO militancy (nome, endereço, cidade, distrito, codPostal, telefone, nif, cc, data_nascimento, email, disponível) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                (self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc,
-                 self.calendar_date, self.email, self.available))
+            c.execute('INSERT INTO militancy (nome, endereco, cidade, distrito, codPostal, telefone, nif, cc, cc_exp, data_nascimento, email, disponivel) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.cc_exp, self.calendar_date, self.email, self.available))
             self.conn.commit()
             logger.info(f"Militante {self.name} adicionado com sucesso!")
             # email
             self.send_email(self.email, self.sender[0], self.sender[1])
             self.send_sms(f'+351{self.phone}')
             c.close()
-            return 'f"Militante {self.name} adicionado com sucesso!"'
+            return f"Militante {self.name} adicionado com sucesso!"
+        except mysql.connector.Error as err:
+            logger.error(f"Erro ao inserir militante {self.name}: {err}")
+            if err.errno == mysql.connector.errorcode.ER_ACCESS_DENIED_ERROR:
+                return "Acesso negado. Verifique as credenciais da sua base de dados."
+            elif err.errno == mysql.connector.errorcode.ER_BAD_DB_ERROR:
+                return "O base de dados não existe. Verifique o nome da base de dados."
+            else:
+                return f"Erro ao inserir o militante {self.name}: {err}"
         except Exception as err:
-            logger.error(f"Error inserting militant {self.name}: {err}")
-            return f"Error inserting militant {self.name}: {err}"
+            logger.error(f"Ocorreu um erro inesperado: {err}")
+            return f"Ocorreu um erro inesperado: {err}"
     
     def update_militant(self):
         try:
             c = self.conn.cursor()
-            c.execute("UPDATE militancy SET Nome=%s, endereço=%s, cidade=%s, distrito=%s, codPostal=%s, telefone=%s, nif=%s, cc=%s, data_nascimento=%s, email=%s, Disponível=%s WHERE militante=%s", (self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.calendar_date, self.email, self.available, self.idUser))
+            c.execute("UPDATE militancy SET nome=%s, endereco=%s, cidade=%s, distrito=%s, codPostal=%s, telefone=%s, nif=%s, cc=%s, cc_exp=%s, data_nascimento=%s, email=%s, disponivel=%s WHERE militante=%s", (self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.cc_exp, self.calendar_date, self.email, self.available, self.idUser))
             self.conn.commit()
             c.close()
             logger.info(f'Militante {self.name} atualizado com sucesso!')
@@ -97,9 +104,10 @@ class Users(object):
                 self.phone = row[6]
                 self.nif = row[7]
                 self.cc = row[8]
-                self.calendar_date = row[9]
-                self.email = row[9]
-                self.available = row[10]
+                self.cc_exp = row[9]
+                self.calendar_date = row[10]
+                self.email = row[11]
+                self.available = row[12]
             c.close()
             logger.info('Militante encontrado com sucesso!')
             return 'Militante encontrado com sucesso!'
@@ -124,7 +132,7 @@ class Users(object):
             </head>
             <body>
             <div>
-                <h2>"""  f'Saudações, sr.(a) {self.name}!' """</h2>
+                <h2>"""f'Saudações, sr.(a) {self.name}!'"""/h2>
                 <h3>
                     Em nome de toda a equipe do Nova Direita, é com grande prazer que confirmo a aceitação de sua filiação como membro activo de nosso Partido Político<br><br>
                     A sua decisão de se juntar a nós, é o testemunho do seu compromisso com os valores e objectivos que defendemos e implica a aceitação dos estatutos e declaração de princípios, aprovados no Congresso Fundador e que se encontram em anexo.<br>
@@ -150,7 +158,7 @@ class Users(object):
         part2 = MIMEText(html, 'html')
         message.attach(part2)
         # Anexos PDF
-        pdf_files = ["logos/nova_direita.png", "pdf/Princípios.pdf", "pdf/Estatutos.pdf", "pdf/IBAN.pdf"]
+        pdf_files = ["logos/nova_direita.png", "pdf/Principios.pdf", "pdf/Estatutos.pdf", "pdf/IBAN.pdf"]
         for pdf_file in pdf_files:
             with open(pdf_file, "rb") as attachment:
                 part = MIMEApplication(attachment.read(), _subtype="pdf")
@@ -196,7 +204,7 @@ class Users(object):
             query = 'select * from militancy'
             data = pd.read_sql(query, conn)
             conn.close()
-            data.to_excel('militancy.xlsx', index=False)
+            data.to_excel('lista_militantes.xlsx', index=False)
             logger.info('Arquivo criado com sucesso!')
             return 'Arquivo criado com sucesso!'
         except pymysql.MySQLError as mysql_err:
@@ -227,9 +235,10 @@ class Users(object):
                 pdf.cell(0, 5, f'Telefone: {row[6]}', 0, 1)
                 pdf.cell(0, 5, f'NIF: {row[7]}', 0, 1)
                 pdf.cell(0, 5, f'Cartão de Cidadão: {row[8]}', 0, 1)
-                pdf.cell(0, 5, f'Data de Nascimento: {row[9]}', 0, 1)
-                pdf.cell(0, 5, f'E-mail: {row[10]}', 0, 1)
-                pdf.cell(0, 5, f'Disponível: {row[11]}', 0, 1)
+                pdf.cell(0, 5, f'Validade Cartão de Cidadão: {row[9]}', 0, 1)
+                pdf.cell(0, 5, f'Data de Nascimento: {row[10]}', 0, 1)
+                pdf.cell(0, 5, f'E-mail: {row[11]}', 0, 1)
+                pdf.cell(0, 5, f'Disponível: {row[12]}', 0, 1)
                 pdf.ln(10)
             pdf_file = 'lista_militantes.pdf'
             pdf.output(pdf_file)

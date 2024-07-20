@@ -50,3 +50,4 @@ Filename: "{app}\Nova Direita.exe"; Description: "{cm:LaunchProgram,Nova Direita
 
 [UninstallDelete]
 Type: files; Name: "{app}\install.log"
+Type: folder; Name: "{app}\logos"
