@@ -5,7 +5,7 @@ a = Analysis(
     ['python_src\\main.py'],
     pathex=[],
     binaries=[],
-    datas=[('src_files\\icon\\logo.ico', 'icon'), ('version.txt', '.')],
+    datas=[('src_files\\logos\\logo.ico', 'icon'), ('version.txt', '.')],
     hiddenimports=['pymysql', 'pandas', 'smtplib', 'ssl', 'tkcalendar', 'babel.numbers'],
     hookspath=[],
     hooksconfig={},
@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['src_files\\icon\\logo.ico'],
+    icon=['src_files\\logos\\logo.ico'],
 )

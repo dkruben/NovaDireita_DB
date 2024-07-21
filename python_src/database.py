@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import mysql.connector
+from tkinter import messagebox
 
-from loggin_setup import logger
+# from loggin_setup import logger
 
 
 class DataBase(object):
@@ -14,7 +15,8 @@ class DataBase(object):
         try:
             self.conn = mysql.connector.connect(host=self.host, user=self.user, password=self.password, database=self.database)
         except Exception as err:
-            logger.error(f'Erro ao conectar ao banco de dados {err}')
+            # logger.error(f'Erro ao conectar ao banco de dados {err}')
+            messagebox.showerror('Erro', f'Erro ao conectar ao banco de dados {err}')
         self.createTable()
     
     def createTable(self):
@@ -24,7 +26,8 @@ class DataBase(object):
             self.conn.commit()
             c.close()
         except Exception as err:
-            logger.error(f'Erro ao criar a tabela de militantes: {str(err)}')
+            # logger.error(f'Erro ao criar a tabela de militantes: {str(err)}')
+            messagebox.showerror('Erro', f'Erro ao criar a tabela de militantes: {str(err)}')
 
 
 banc = DataBase()

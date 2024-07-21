@@ -5,7 +5,7 @@
 AppId={{20240101-ABCD-1234-EFGH-5678IJKLMNOP}}
 AppName=Nova Direita - Gest√£o de Militantes
 AppVersion=1.0
-AppCopyright=¬©Nova Direita 2024
+AppCopyright=©Nova Direita 2024
 DefaultDirName={autopf}\Nova Direita
 DefaultGroupName=Nova Direita
 OutputBaseFilename=NovaDireita-Instalador
@@ -19,9 +19,9 @@ MinVersion=6.1
 SignedUninstaller=no
 VersionInfoVersion=1.0.0.0
 VersionInfoCompany=Nova Direita
-VersionInfoDescription=Gest√£o de Militantes
+VersionInfoDescription=Gest„o de Militantes
 VersionInfoCopyright=@Nova Direita 2024
-VersionInfoProductName=Nova Direita - Gest√£o de Militantes
+VersionInfoProductName=Nova Direita - Gest„o de Militantes
 VersionInfoProductVersion=1.0.0.0
 SetupLogging=yes
 ; LogFile={app}\install.log
@@ -50,4 +50,3 @@ Filename: "{app}\Nova Direita.exe"; Description: "{cm:LaunchProgram,Nova Direita
 
 [UninstallDelete]
 Type: files; Name: "{app}\install.log"
-Type: folder; Name: "{app}\logos"

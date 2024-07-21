@@ -19,3 +19,6 @@ python_src/__pycache__/constants.cpython-312.pyc
 python_src/__pycache__/database.cpython-312.pyc
 python_src/__pycache__/loggin_setup.cpython-312.pyc
 python_src/__pycache__/terms_and_conditions.cpython-312.pyc
+!/python_src_orig/
+python_src/__pycache__/main.cpython-312.pyc
+*.log

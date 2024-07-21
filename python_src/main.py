@@ -1,29 +1,25 @@
 # -*- coding: utf-8 -*-
+import ctypes
 import re
+import sys
 import tkinter as tk
 from tkinter import *
-from tkinter import scrolledtext
 from tkinter import messagebox
+from tkinter import scrolledtext
 
-import pyuac
 from tkcalendar import DateEntry
 
 from constants import district_options
-from loggin_setup import logger
+# from loggin_setup import logger
 from terms_and_conditions import text_rgpd
 from users import Users
 
 
-def format_cep(cep):
-    if len(cep) == 8 and cep[:4].isdigit() and cep[4] == '-' and cep[5:].isdigit():
-        return True
-    return False
-
-
 class Application:
     def __init__(self, master=None):
-        logger.info('======================================')
-        logger.info(f"A iniciar a aplicação 'Nova Direita'")
+        self.master = master
+        # logger.info('======================================')
+        # logger.info(f"A iniciar a aplicação 'Nova Direita'")
         self.user = Users()
         self.lbl_font = ('Cambria', '12', 'bold')
         self.txt_font = ('times new roman', '11')
@@ -169,7 +165,7 @@ class Application:
         self.txt_cep['width'] = 20
         self.txt_cep['font'] = self.txt_font
         self.txt_cep.pack(side=LEFT)
-        validate_cep = self.container7.register(format_cep)
+        validate_cep = self.container7.register(self.format_cep)
         self.txt_cep.config(validate="focusout", validatecommand=(validate_cep, "%P"))
         # Telefone
         self.lbl_phone = Label(self.container8, text='Telefone:', font=self.lbl_font, width=10)
@@ -250,12 +246,30 @@ class Application:
         self.lbl_msg = Label(self.container18, text='', fg='blue')
         self.lbl_msg['font'] = ('Verdana', '9', 'bold')
         self.lbl_msg.pack()
+        self.create_widgets()
+    
+    def format_cep(self, cep):
+        if len(cep) == 8 and cep[:4].isdigit() and cep[4] == '-' and cep[5:].isdigit():
+            return True
+        return False
+    
+    def create_widgets(self):
+        self.btn_error = Button(self.master, text="Erro gerado", command=self.generate_error)
+        self.btn_error.pack()
+    
+    def generate_error(self):
+        try:
+            # Code that might raise an exception
+            raise Exception("Ocorreu um erro")
+        except Exception as err:
+            messagebox.showerror("Erro", f"Ocorreu um erro: {str(err)}")
+            # logger.error("Ocorreu um erro: %s", str(err))
     
     def openSecondWindow(self):
         second_window = Toplevel()
         second_window.title("Termos e Condições")
         second_window.geometry("600x500")
-        # second_window.iconbitmap('logo.ico')
+        second_window.iconbitmap('logo.ico')
         second_window.transient(root)
         second_window.focus_force()
         second_window.grab_set()
@@ -276,7 +290,7 @@ class Application:
     def insert_militant(self):
         if not self.validate_fields():
             return
-        logger.info(f"A tentar inserir Militante: {self.txt_name.get()}")
+        # logger.info(f"A tentar inserir Militante: {self.txt_name.get()}")
         self.user.name = self.txt_name.get()
         self.user.address = self.txt_address.get()
         self.user.city = self.txt_city.get()
@@ -289,30 +303,17 @@ class Application:
         self.user.calendar_date = self.entry_calendar.get_date()
         self.user.email = self.txt_email.get()
         self.user.available = self.radio_availability.get()
-
-        # Limpar os campos após a operação
-        self.txt_idUser.delete(0, END)
-        self.txt_name.delete(0, END)
-        self.txt_address.delete(0, END)
-        self.txt_city.delete(0, END)
-        self.user.district = self.selected_district.get()
-        self.txt_cep.delete(0, END)
-        self.txt_phone.delete(0, END)
-        self.txt_nif.delete(0, END)
-        self.txt_cc.delete(0, END)
-        self.entry_cc_exp.delete(0, END)
-        self.entry_calendar.delete(0, END)
-        self.txt_email.delete(0, END)
         self.lbl_msg['text'] = self.user.insert_militant()
         self.clear_fields()
-        logger.debug(f"Militant data: {self.user.__dict__}")
+        # logger.debug(f"Militant data: {self.user.__dict__}")
         result = self.user.insert_militant()
-        logger.info(f"Militante inserido com: {result}")
+        # logger.info(f"Militante inserido com: {result}")
+        messagebox.showwarning('Inserir', f"Militante inserido com: {result}")
     
     def change_militant(self):
         if not self.validate_fields():
             return
-        logger.info(f"A tentar atualizar Militante: {self.txt_name.get()}")
+        # logger.info(f"A tentar atualizar Militante: {self.txt_name.get()}")
         self.user.idUser = self.txt_idUser.get()
         self.user.name = self.txt_name.get()
         self.user.address = self.txt_address.get()
@@ -326,31 +327,20 @@ class Application:
         self.user.calendar_date = self.entry_calendar.get_date()
         self.user.email = self.txt_email.get()
         self.user.available = self.radio_availability.get()
-
-        self.txt_idUser.delete(0, END)
-        self.txt_name.delete(0, END)
-        self.txt_address.delete(0, END)
-        self.txt_city.delete(0, END)
-        self.selected_district.set(self.user.district)
-        self.txt_cep.delete(0, END)
-        self.txt_phone.delete(0, END)
-        self.txt_nif.delete(0, END)
-        self.txt_cc.delete(0, END)
-        self.entry_cc_exp.delete(0, END)
-        self.entry_calendar.delete(0, END)
-        self.txt_email.delete(0, END)
         self.lbl_msg['text'] = self.user.update_militant()
         self.clear_fields()
-        logger.debug(f"Dados do Militante atualizados: {self.user.__dict__}")
+        # logger.debug(f"Dados do Militante atualizados: {self.user.__dict__}")
         result = self.user.update_militant()
-        logger.info(f"Resultado da atualização do Militante: {result}")
+        # logger.info(f"Resultado da atualização do Militante: {result}")
+        messagebox.showinfo('Atualização', f'Militante atualizado: {result}')
     
     def exclude_militant(self):
-        logger.info(f'A tentar excluir o Militante: {self.txt_idUser.get()}')
+        # logger.info(f'A tentar excluir o Militante: {self.txt_idUser.get()}')
         self.lbl_msg['text'] = self.user.delete_militant()
         self.clear_fields()
         result = self.user.delete_militant()
-        logger.info(f'Militante excluído: {result}')
+        # logger.info(f'Militante excluído: {result}')
+        messagebox.showinfo('Exclusão', f'Militante excluído: {result}')
     
     def export_sheets(self):
         self.lbl_msg['text'] = self.user.create_sheet()
@@ -359,12 +349,13 @@ class Application:
         self.lbl_msg['text'] = self.user.generate_pdf()
     
     def search_militant(self):
-        logger.info(f"Procurar o Militante: {self.txt_idUser.get()}")
+        # logger.info(f"Procurar o Militante: {self.txt_idUser.get()}")
         idUser = self.txt_idUser.get()
         self.lbl_msg['text'] = self.user.select_militant(idUser)
         self.fill_fields()
         result = self.user.select_militant(idUser)
-        logger.info(f"Resultado da procura do Militante: {result}")
+        # logger.info(f"Resultado da procura do Militante: {result}")
+        messagebox.showinfo('Procura', f"Resultado da procura do Militante: {result}")
     
     def validate_fields(self):
         fields = {
@@ -396,7 +387,7 @@ class Application:
                 messagebox.showwarning("Aviso", "O campo 'Nome' deve conter apenas letras e espaços.")
                 return False
             
-            if field == 'Cód. Postal' and not format_cep(value):
+            if field == 'Cód. Postal' and not self.format_cep(value):
                 messagebox.showwarning("Aviso", "Código Postal inválido. Use o formato 'xxxx-xxx'.")
                 return False
             
@@ -422,13 +413,13 @@ class Application:
         self.txt_name.delete(0, END)
         self.txt_address.delete(0, END)
         self.txt_city.delete(0, END)
-        self.selected_district.set(district_options[0])
+        self.user.district = self.selected_district.get()
         self.txt_cep.delete(0, END)
         self.txt_phone.delete(0, END)
         self.txt_nif.delete(0, END)
         self.txt_cc.delete(0, END)
         self.entry_cc_exp.delete(0, END)
-        self.entry_calendar.set_date(None)
+        self.entry_calendar.delete(0, END)
         self.txt_email.delete(0, END)
     
     def fill_fields(self):
@@ -457,15 +448,19 @@ class Application:
         self.radio_availability.set("Sim")
 
 
-if __name__ == '__main__':
-    if not pyuac.isUserAdmin():
-        pyuac.runAsAdmin()
+def run_as_admin():
+    if ctypes.windll.shell32.IsUserAnAdmin():
+        print("Running with administrative privileges")
     else:
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+
+
+if __name__ == '__main__':
+    run_as_admin()
+    if ctypes.windll.shell32.IsUserAnAdmin():
         root = tk.Tk()
-        root.withdraw()
         app = Application(root)
         root.title('Nova Direita - Gestão de Militantes')
         root.geometry('800x790')
-        # root.iconbitmap('logo.ico')
-        root.deiconify()
+        root.iconbitmap('logo.ico')
         root.mainloop()
