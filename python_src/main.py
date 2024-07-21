@@ -259,7 +259,6 @@ class Application:
     
     def generate_error(self):
         try:
-            # Code that might raise an exception
             raise Exception("Ocorreu um erro")
         except Exception as err:
             messagebox.showerror("Erro", f"Ocorreu um erro: {str(err)}")
