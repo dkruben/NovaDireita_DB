@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from fpdf import FPDF
 
+from constants import pdf_image
+
 
 class PrintPdf(FPDF):
     def header(self):
-        self.image('logos/nova_direita.png', 10, 8, 33)
+        self.image(pdf_image, 10, 8, 33)
         self.set_font('Arial', 'B', 12)
         self.cell(0, 10, 'Lista de Militantes', 0, 1, 'C')
         self.ln(10)

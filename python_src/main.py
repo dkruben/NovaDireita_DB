@@ -19,6 +19,7 @@ class Application:
     def __init__(self, master=None):
         self.master = master
         self.user = Users()
+        self.btn_error = None
         self.lbl_font = ('Cambria', '12', 'bold')
         self.txt_font = ('times new roman', '11')
         self.radio = StringVar()
@@ -246,7 +247,8 @@ class Application:
         self.lbl_msg.pack()
         self.create_widgets()
     
-    def format_cep(self, cep):
+    @staticmethod
+    def format_cep(cep):
         if len(cep) == 8 and cep[:4].isdigit() and cep[4] == '-' and cep[5:].isdigit():
             return True
         return False
@@ -255,7 +257,8 @@ class Application:
         self.btn_error = Button(self.master, text="Erro gerado", command=self.generate_error)
         self.btn_error.pack()
     
-    def generate_error(self):
+    @staticmethod
+    def generate_error():
         try:
             raise Exception('Ocorreu um erro')
         except Exception as err:
@@ -298,9 +301,9 @@ class Application:
         self.user.calendar_date = self.entry_calendar.get_date()
         self.user.email = self.txt_email.get()
         self.user.available = self.radio_availability.get()
-        self.lbl_msg['text'] = self.user.insert_militant()
-        self.clear_fields()
         result = self.user.insert_militant()
+        self.lbl_msg['text'] = result
+        self.clear_fields()
         messagebox.showwarning('Inserir', f'Militante inserido com: {result}')
     
     def change_militant(self):
@@ -448,5 +451,5 @@ if __name__ == '__main__':
         app = Application(root)
         root.title('Nova Direita - Gestão de Militantes')
         root.geometry('800x790')
-        root.iconbitmap(icon)
+        # root.iconbitmap(icon)
         root.mainloop()
