@@ -2,7 +2,7 @@
 import os
 from PyInstaller.__main__ import run
 
-__version__ = '1.0.0.0'
+__version__ = '1.0.0'
 
 icon_dir = os.path.join('src_files', 'logos', 'logo.ico')
 
@@ -24,6 +24,7 @@ def generate_exe():
         '--add-data=version.txt;.',
         '--workpath=build',
         '--distpath=dist',
+        f'--version-file=version.txt',
     ]
     return opts
 

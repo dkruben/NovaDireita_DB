@@ -13,21 +13,17 @@ VSVersionInfo(
     fileType=0x1,
     subtype=0x0,
     date=(0, 0)
-    ),
+  ),
   kids=[
     StringFileInfo(
       [
       StringTable(
-        '040904B0',
-        [StringStruct('CompanyName', '_DKRuben_'),
-        StringStruct('FileDescription', 'Nova Direita - Gestão de Militantes'),
-        StringStruct('FileVersion', '1.0.0.0'),
-        StringStruct('InternalName', 'Nova Direita'),
-        StringStruct('LegalCopyright', '©_DKRuben_. All rights reserved.'),
-        StringStruct('OriginalFilename', 'Nova Direita.exe'),
-        StringStruct('ProductName', 'Nova Direita'),
-        StringStruct('ProductVersion', '1.0.0.0')])
+        u'040904B0',
+        [StringStruct(u'FileVersion', u'1.0.0.0'),
+         StringStruct(u'ProductVersion', u'1.0...0'),
+         StringStruct(u'ProductName', u'Nova Direita'),
+         StringStruct(u'FileDescription', u'Nova Direita Application')])
       ]),
-    VarFileInfo([VarStruct('Translation', [1033, 1200])])
+    VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
   ]
 )

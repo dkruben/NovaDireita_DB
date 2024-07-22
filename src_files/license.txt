@@ -1,0 +1,24 @@
+Nova Direita - Gestão de Militantes
+Acordo de Licença de Software
+
+Direitos Autorais (c) 2024 Nova Direita
+
+1. Concessão de Licença
+   A Nova Direita concede-lhe uma licença não exclusiva e intransferível para utilizar o software Nova Direita - Gestão de Militantes.
+
+2. Restrições
+   Não pode distribuir, alugar, sublicenciar ou disponibilizar a terceiros o Software ou a documentação ou cópias dos mesmos, exceto conforme expressamente permitido nesta Licença sem o consentimento prévio por escrito da Nova Direita.
+
+3. Direitos de Propriedade
+   O Software é informação proprietária da Nova Direita. Concorda em não modificar, adaptar, traduzir, fazer engenharia reversa, descompilar, desmontar ou tentar descobrir o código-fonte do Software.
+
+4. Rescisão
+   Esta licença é efetiva até ser rescindida. Os seus direitos sob esta Licença terminarão automaticamente sem aviso prévio da Nova Direita se não cumprir qualquer termo(s) desta Licença.
+
+5. Isenção de Garantia
+   O software é fornecido "_DKRuben_", sem garantia de qualquer tipo, expressa ou implícita, incluindo, mas não se limitando às garantias de comercialização, adequação a um propósito específico e não violação.
+
+6. Limitação de Responsabilidade
+   Em nenhum caso a Nova Direita será responsável por qualquer reclamação, danos ou outra responsabilidade, seja numa ação de contrato, delito ou de outra forma, decorrente de, ou em conexão com o software ou o uso ou outras negociações no software.
+
+Ao instalar ou usar este software, você concorda em estar vinculado aos termos desta licença.

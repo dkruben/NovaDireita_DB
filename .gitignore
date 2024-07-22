@@ -26,3 +26,4 @@ python_src/__pycache__/main.cpython-312.pyc
 *.py
 python_src/__pycache__/email_sender.cpython-312.pyc
 python_src/__pycache__/sms_sender.cpython-312.pyc
+.idea/vcs.xml

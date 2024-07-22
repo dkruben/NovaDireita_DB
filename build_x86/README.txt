@@ -1,7 +1,7 @@
 # Nova Direita - Gestão de Militantes
 
 ## Descrição
-Nova Direita - Gestão de Militantes é uma aplicação desktop desenvolvida para gerenciar eficientemente os militantes da Nova Direita. Esta ferramenta oferece uma interface intuitiva para cadastro, atualização e consulta de informações dos membros.
+Nova Direita - Gestão de Militantes é uma aplicação 'Windowns' desenvolvida para gerenciar eficientemente os militantes da Nova Direita. Esta ferramenta oferece uma interface intuitiva para cadastro, atualização e consulta de informações dos membros.
 
 ## Características
 - Interface gráfica amigável
@@ -18,7 +18,7 @@ Nova Direita - Gestão de Militantes é uma aplicação desktop desenvolvida par
 ## Instalação
 1. Baixe o instalador "NovaDireita-Instalador.exe"
 2. Execute o instalador e siga as instruções na tela
-3. Após a instalação, o programa pode ser iniciado através do ícone no desktop ou no menu Iniciar
+3. Após a instalação, o programa pode ser iniciado através do ícone no ambiente de trabalho ou no menu Iniciar
 
 ## Uso
 Após a instalação, inicie o programa "Nova Direita.exe". A interface principal permitirá acesso às diversas funcionalidades do sistema.

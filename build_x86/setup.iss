@@ -12,18 +12,22 @@ OutputBaseFilename=NovaDireita-Instalador
 Compression=lzma
 SolidCompression=yes
 SetupIconFile=..\src_files\logos\logo.ico
+; WizardImageFile=..\src_files\logos\wizard.bmp
+; WizardSmallImageFile=..\src_files\logos\wizardsmall.bmp
+LicenseFile=..\src_files\license.txt
 ShowLanguageDialog=yes
 MinVersion=6.1
 SignedUninstaller=no
 VersionInfoVersion=1.0.0.0
 VersionInfoCompany=Nova Direita
-VersionInfoDescription=Gest√£o de Militantes
+VersionInfoDescription=Gest„o de Militantes
 VersionInfoCopyright=@Nova Direita 2024
-VersionInfoProductName=Nova Direita - Gest√£o de Militantes
+VersionInfoProductName=Nova Direita - Gest„o de Militantes
 VersionInfoProductVersion=1.0.0.0
 SetupLogging=yes
 UninstallDisplayIcon={app}\Nova Direita.exe
 UninstallLogMode=append
+PrivilegesRequired=admin
 
 [Languages]
 Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
@@ -36,6 +40,7 @@ Source: "..\src_files\logos\nova_direita.png"; DestDir: "{app}\logos"; Flags: ig
 Source: "..\src_files\pdf\Principios.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
 Source: "..\src_files\pdf\Estatutos.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
 Source: "..\src_files\pdf\IBAN.pdf"; DestDir: "{app}\pdf"; Flags: ignoreversion
+Source: "README.txt"; DestDir: "{app}"; Flags: ignoreversion isreadme
 
 [Icons]
 Name: "{group}\Nova Direita"; Filename: "{app}\Nova Direita.exe"; IconFilename: "{app}\logo.ico"
