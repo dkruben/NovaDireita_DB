@@ -22,3 +22,7 @@ python_src/__pycache__/terms_and_conditions.cpython-312.pyc
 !/python_src_orig/
 python_src/__pycache__/main.cpython-312.pyc
 *.log
+!/test/test_file.py
+*.py
+python_src/__pycache__/email_sender.cpython-312.pyc
+python_src/__pycache__/sms_sender.cpython-312.pyc

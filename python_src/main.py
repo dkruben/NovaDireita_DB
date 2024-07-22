@@ -10,7 +10,7 @@ from tkinter import scrolledtext
 from tkcalendar import DateEntry
 
 from constants import district_options
-# from loggin_setup import logger
+from constants import icon
 from terms_and_conditions import text_rgpd
 from users import Users
 
@@ -18,8 +18,6 @@ from users import Users
 class Application:
     def __init__(self, master=None):
         self.master = master
-        # logger.info('======================================')
-        # logger.info(f"A iniciar a aplicação 'Nova Direita'")
         self.user = Users()
         self.lbl_font = ('Cambria', '12', 'bold')
         self.txt_font = ('times new roman', '11')
@@ -166,7 +164,7 @@ class Application:
         self.txt_cep['font'] = self.txt_font
         self.txt_cep.pack(side=LEFT)
         validate_cep = self.container7.register(self.format_cep)
-        self.txt_cep.config(validate="focusout", validatecommand=(validate_cep, "%P"))
+        self.txt_cep.config(validate='focusout', validatecommand=(validate_cep, '%P'))
         # Telefone
         self.lbl_phone = Label(self.container8, text='Telefone:', font=self.lbl_font, width=10)
         self.lbl_phone.pack(side=LEFT)
@@ -213,9 +211,9 @@ class Application:
         self.lbl_availability = Label(self.container14, text='Aceito os termos acima?', font=self.lbl_font, width=20)
         self.lbl_availability.pack(side=LEFT)
         self.radio_availability = StringVar()
-        self.radio_availability.set("Sim")
-        self.avail_yes = Radiobutton(self.container14, text="Sim", variable=self.radio_availability, value="Sim", font=self.txt_font)
-        self.avail_no = Radiobutton(self.container14, text="Não", variable=self.radio_availability, value="Não", font=self.txt_font)
+        self.radio_availability.set('Sim')
+        self.avail_yes = Radiobutton(self.container14, text='Sim', variable=self.radio_availability, value='Sim', font=self.txt_font)
+        self.avail_no = Radiobutton(self.container14, text='Não', variable=self.radio_availability, value='Não', font=self.txt_font)
         self.avail_yes.pack(side=LEFT)
         self.avail_no.pack(side=LEFT)
         # Inserir
@@ -259,16 +257,15 @@ class Application:
     
     def generate_error(self):
         try:
-            raise Exception("Ocorreu um erro")
+            raise Exception('Ocorreu um erro')
         except Exception as err:
-            messagebox.showerror("Erro", f"Ocorreu um erro: {str(err)}")
-            # logger.error("Ocorreu um erro: %s", str(err))
+            messagebox.showerror('Erro', f'Ocorreu um erro: {str(err)}')
     
     def openSecondWindow(self):
         second_window = Toplevel()
-        second_window.title("Termos e Condições")
-        second_window.geometry("600x500")
-        second_window.iconbitmap('logo.ico')
+        second_window.title('Termos e Condições')
+        second_window.geometry('600x500')
+        second_window.iconbitmap(icon)
         second_window.transient(root)
         second_window.focus_force()
         second_window.grab_set()
@@ -289,7 +286,6 @@ class Application:
     def insert_militant(self):
         if not self.validate_fields():
             return
-        # logger.info(f"A tentar inserir Militante: {self.txt_name.get()}")
         self.user.name = self.txt_name.get()
         self.user.address = self.txt_address.get()
         self.user.city = self.txt_city.get()
@@ -304,15 +300,12 @@ class Application:
         self.user.available = self.radio_availability.get()
         self.lbl_msg['text'] = self.user.insert_militant()
         self.clear_fields()
-        # logger.debug(f"Militant data: {self.user.__dict__}")
         result = self.user.insert_militant()
-        # logger.info(f"Militante inserido com: {result}")
-        messagebox.showwarning('Inserir', f"Militante inserido com: {result}")
+        messagebox.showwarning('Inserir', f'Militante inserido com: {result}')
     
     def change_militant(self):
         if not self.validate_fields():
             return
-        # logger.info(f"A tentar atualizar Militante: {self.txt_name.get()}")
         self.user.idUser = self.txt_idUser.get()
         self.user.name = self.txt_name.get()
         self.user.address = self.txt_address.get()
@@ -328,17 +321,13 @@ class Application:
         self.user.available = self.radio_availability.get()
         self.lbl_msg['text'] = self.user.update_militant()
         self.clear_fields()
-        # logger.debug(f"Dados do Militante atualizados: {self.user.__dict__}")
         result = self.user.update_militant()
-        # logger.info(f"Resultado da atualização do Militante: {result}")
         messagebox.showinfo('Atualização', f'Militante atualizado: {result}')
     
     def exclude_militant(self):
-        # logger.info(f'A tentar excluir o Militante: {self.txt_idUser.get()}')
         self.lbl_msg['text'] = self.user.delete_militant()
         self.clear_fields()
         result = self.user.delete_militant()
-        # logger.info(f'Militante excluído: {result}')
         messagebox.showinfo('Exclusão', f'Militante excluído: {result}')
     
     def export_sheets(self):
@@ -348,13 +337,11 @@ class Application:
         self.lbl_msg['text'] = self.user.generate_pdf()
     
     def search_militant(self):
-        # logger.info(f"Procurar o Militante: {self.txt_idUser.get()}")
         idUser = self.txt_idUser.get()
         self.lbl_msg['text'] = self.user.select_militant(idUser)
         self.fill_fields()
         result = self.user.select_militant(idUser)
-        # logger.info(f"Resultado da procura do Militante: {result}")
-        messagebox.showinfo('Procura', f"Resultado da procura do Militante: {result}")
+        messagebox.showinfo('Procura', f'Resultado da procura do Militante: {result}')
     
     def validate_fields(self):
         fields = {
@@ -379,31 +366,31 @@ class Application:
         
         for field, value in fields.items():
             if not value:
-                messagebox.showwarning("Aviso", f"O campo '{field}' é obrigatório.")
+                messagebox.showwarning('Aviso', f'O campo \'{field}\' é obrigatório.')
                 return False
             
             if field == 'Nome' and not re.match(name_regex, value):
-                messagebox.showwarning("Aviso", "O campo 'Nome' deve conter apenas letras e espaços.")
+                messagebox.showwarning('Aviso', 'O campo \'Nome\' deve conter apenas letras e espaços.')
                 return False
             
             if field == 'Cód. Postal' and not self.format_cep(value):
-                messagebox.showwarning("Aviso", "Código Postal inválido. Use o formato 'xxxx-xxx'.")
+                messagebox.showwarning('Aviso', 'Código Postal inválido. Use o formato \'xxxx-xxx\'.')
                 return False
             
             if field == 'Telefone' and not re.match(phone_regex, value):
-                messagebox.showwarning("Aviso", "O campo 'Telefone' deve conter exatamente 9 dígitos.")
+                messagebox.showwarning('Aviso', 'O campo \'Telefone\' deve conter exatamente 9 dígitos.')
                 return False
             
             if field == 'NIF' and not re.match(nif_regex, value):
-                messagebox.showwarning("Aviso", "O campo 'NIF' deve conter exatamente 9 dígitos.")
+                messagebox.showwarning('Aviso', 'O campo \'NIF\' deve conter exatamente 9 dígitos.')
                 return False
             
             if field == 'BI/CC' and not re.match(cc_regex, value):
-                messagebox.showwarning("Aviso", "O campo 'BI/CC' deve conter exatamente 8 dígitos.")
+                messagebox.showwarning('Aviso', 'O campo \'BI/CC\' deve conter exatamente 8 dígitos.')
                 return False
             
             if field == 'E-mail' and not re.match(email_regex, value):
-                messagebox.showwarning("Aviso", "Endereço de e-mail inválido.")
+                messagebox.showwarning('Aviso', 'Endereço de e-mail inválido.')
                 return False
         return True
     
@@ -449,9 +436,9 @@ class Application:
 
 def run_as_admin():
     if ctypes.windll.shell32.IsUserAnAdmin():
-        print("Running with administrative privileges")
+        print('Running with administrative privileges')
     else:
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+        ctypes.windll.shell32.ShellExecuteW(None, 'runas', sys.executable, __file__, None, 1)
 
 
 if __name__ == '__main__':
@@ -461,5 +448,5 @@ if __name__ == '__main__':
         app = Application(root)
         root.title('Nova Direita - Gestão de Militantes')
         root.geometry('800x790')
-        root.iconbitmap('logo.ico')
+        root.iconbitmap(icon)
         root.mainloop()

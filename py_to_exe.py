@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 from PyInstaller.__main__ import run
 
 __version__ = '1.0.0.0'
