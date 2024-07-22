@@ -297,7 +297,7 @@ class Application:
         self.user.phone = self.txt_phone.get()
         self.user.nif = self.txt_nif.get()
         self.user.cc = self.txt_cc.get()
-        self.user.cc_exp = self.entry_cc_exp.get()
+        self.user.cc_exp = self.entry_cc_exp.get_date()
         self.user.calendar_date = self.entry_calendar.get_date()
         self.user.email = self.txt_email.get()
         self.user.available = self.radio_availability.get()
@@ -318,7 +318,7 @@ class Application:
         self.user.phone = self.txt_phone.get()
         self.user.nif = self.txt_nif.get()
         self.user.cc = self.txt_cc.get()
-        self.user.cc_exp = self.entry_cc_exp.get()
+        self.user.cc_exp = self.entry_cc_exp.get_date()
         self.user.calendar_date = self.entry_calendar.get_date()
         self.user.email = self.txt_email.get()
         self.user.available = self.radio_availability.get()
@@ -361,7 +361,7 @@ class Application:
             'Disponível': self.radio_availability.get(),
         }
 
-        name_regex = r'^[a-zA-Z\s]+$'
+        name_regex = r'^[\p{L}\s-*_]+$'
         phone_regex = r'^\d{9}$'
         nif_regex = r'^\d{9}$'
         cc_regex = r'^\d{8}$'
@@ -429,8 +429,7 @@ class Application:
         self.txt_nif.insert(0, self.user.nif)
         self.txt_cc.delete(0, END)
         self.txt_cc.insert(0, self.user.cc)
-        self.entry_cc_exp.delete(0, END)
-        self.entry_cc_exp.insert(0, self.user.cc_exp)
+        self.entry_cc_exp.set_date(self.user.cc_exp)
         self.entry_calendar.set_date(self.user.calendar_date)
         self.txt_email.delete(0, END)
         self.txt_email.insert(0, self.user.email)
@@ -451,5 +450,5 @@ if __name__ == '__main__':
         app = Application(root)
         root.title('Nova Direita - Gestão de Militantes')
         root.geometry('800x790')
-        # root.iconbitmap(icon)
+        root.iconbitmap(icon)
         root.mainloop()

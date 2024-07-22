@@ -3,7 +3,7 @@
 
 [Setup]
 AppId={{20240101-ABCD-1234-EFGH-5678IJKLMNOP}}
-AppName=Nova Direita - Gest√£o de Militantes
+AppName=Nova Direita - Gest„o de Militantes
 AppVersion=1.0
 AppCopyright=@Nova Direita 2024
 DefaultDirName={autopf}\Nova Direita

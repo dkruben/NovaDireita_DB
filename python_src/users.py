@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import mysql.connector
 import pandas as pd
 import pymysql
@@ -99,7 +100,12 @@ class Users:
             query = 'SELECT * FROM militancy'
             data = pd.read_sql(query, conn)
             conn.close()
-            data.to_excel('lista_militantes.xlsx', index=False)
+            desktop_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+            export_folder = os.path.join(desktop_path, 'Lista exportada')
+            if not os.path.exists(export_folder):
+                os.makedirs(export_folder)
+            excel_file = os.path.join(export_folder, 'lista_militantes.xlsx')
+            data.to_excel(excel_file, index=False)
             return 'Arquivo criado com sucesso!'
         except pymysql.MySQLError as mysql_err:
             return f'Ocorreu um erro MySQL ao criar o arquivo: {mysql_err}'
@@ -123,7 +129,11 @@ class Users:
                     pdf.cell(0, 5, f'{field}: {row[i + 1]}', 0, 1)
                 pdf.ln(10)
             cursor.close()
-            pdf_file = 'lista_militantes.pdf'
+            desktop_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+            export_folder = os.path.join(desktop_path, 'Lista exportada')
+            if not os.path.exists(export_folder):
+                os.makedirs(export_folder)
+            pdf_file = os.path.join(export_folder, 'lista_militantes.pdf')
             pdf.output(pdf_file)
             return 'PDF gerado com sucesso!'
         except Exception as err:
