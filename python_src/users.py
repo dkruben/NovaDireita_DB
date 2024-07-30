@@ -12,7 +12,7 @@ from sms_sender import send_sms
 
 class Users:
     """Class to handle user (militant) operations in the database."""
-    def __init__(self, idUser=0, name='', address='', city='', district='', cep='', phone='', nif='', cc='', cc_exp='', aniversario=None, email='', available=''):
+    def __init__(self, idUser=0, name='', address='', city='', district='', cep='', phone='', nif='', cc='', cc_exp='', birthday=None, email='', available=''):
         # Database connection and user attributes
         self.conn = DataBase().conn
         self.idUser = idUser
@@ -25,7 +25,7 @@ class Users:
         self.nif = nif
         self.cc = cc
         self.cc_exp = cc_exp
-        self.calendar_date = aniversario
+        self.birthday_date = birthday
         self.email = email
         self.available = available
         # Email sender instance
@@ -41,7 +41,7 @@ class Users:
         try:
             cursor = self.conn.cursor()
             query = '''INSERT INTO militancy(nome, endereco, cidade, distrito, codPostal, telefone, nif, cc, cc_exp, data_nascimento, email, disponivel) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-            values = (self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.cc_exp, self.calendar_date, self.email, self.available)
+            values = (self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.cc_exp, self.birthday_date, self.email, self.available)
             cursor.execute(query, values)
             self.conn.commit()
             # Notify via email and SMS
@@ -60,7 +60,7 @@ class Users:
         try:
             cursor = self.conn.cursor()
             query = '''UPDATE militancy SET nome=%s, endereco=%s, cidade=%s, distrito=%s, codPostal=%s, telefone=%s, nif=%s, cc=%s, cc_exp=%s, data_nascimento=%s, email=%s, disponivel=%s WHERE militante=%s'''
-            values = (self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.cc_exp, self.calendar_date, self.email, self.available, self.idUser)
+            values = (self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.cc_exp, self.birthday_date, self.email, self.available, self.idUser)
             cursor.execute(query, values)
             self.conn.commit()
             cursor.close()
@@ -87,7 +87,7 @@ class Users:
             cursor.execute(query, (idUser,))
             result = cursor.fetchone()
             if result:
-                self.idUser, self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.cc_exp, self.calendar_date, self.email, self.available = result
+                self.idUser, self.name, self.address, self.city, self.district, self.cep, self.phone, self.nif, self.cc, self.cc_exp, self.birthday_date, self.email, self.available = result
             cursor.close()
             return 'Militante encontrado com sucesso!'
         except Exception as err:

@@ -195,12 +195,12 @@ class Application:
         self.entry_cc_exp = DateEntry(frame_cc_exp, width=20, font=self.txt_font, background='darkblue', foreground='white', borderwidth=2, date_pattern='dd/mm/yyyy')
         self.entry_cc_exp.pack(side=LEFT)
         # Calendário
-        self.lbl_calendar = Label(self.container12, text='Data de Nascimento:', font=self.lbl_font)
-        self.lbl_calendar.pack(side=LEFT)
-        frame_calendar = Frame(self.container12)
-        frame_calendar.pack(side=LEFT)
-        self.entry_calendar = DateEntry(frame_calendar, width=20, font=self.txt_font, background='darkblue', foreground='white', borderwidth=2, date_pattern='dd/mm/yyyy')
-        self.entry_calendar.pack(side=LEFT)
+        self.lbl_birthday = Label(self.container12, text='Data de Nascimento:', font=self.lbl_font)
+        self.lbl_birthday.pack(side=LEFT)
+        frame_birthday = Frame(self.container12)
+        frame_birthday.pack(side=LEFT)
+        self.entry_birthday = DateEntry(frame_birthday, width=20, font=self.txt_font, background='darkblue', foreground='white', borderwidth=2, date_pattern='dd/mm/yyyy')
+        self.entry_birthday.pack(side=LEFT)
         # E-mail
         self.lbl_email = Label(self.container13, text='E-mail:', font=self.lbl_font, width=10)
         self.lbl_email.pack(side=LEFT)
@@ -298,7 +298,7 @@ class Application:
         self.user.nif = self.txt_nif.get()
         self.user.cc = self.txt_cc.get()
         self.user.cc_exp = self.entry_cc_exp.get_date()
-        self.user.calendar_date = self.entry_calendar.get_date()
+        self.user.birthday_date = self.entry_birthday.get_date()
         self.user.email = self.txt_email.get()
         self.user.available = self.radio_availability.get()
         result = self.user.insert_militant()
@@ -319,7 +319,7 @@ class Application:
         self.user.nif = self.txt_nif.get()
         self.user.cc = self.txt_cc.get()
         self.user.cc_exp = self.entry_cc_exp.get_date()
-        self.user.calendar_date = self.entry_calendar.get_date()
+        self.user.birthday_date = self.entry_birthday.get_date()
         self.user.email = self.txt_email.get()
         self.user.available = self.radio_availability.get()
         self.lbl_msg['text'] = self.user.update_militant()
@@ -356,7 +356,7 @@ class Application:
             'NIF': self.txt_nif.get(),
             'BI/CC': self.txt_cc.get(),
             'Data Expiração': self.entry_cc_exp.get(),
-            'Data Nascimento': self.entry_calendar.get(),
+            'Data Nascimento': self.entry_birthday.get(),
             'E-mail': self.txt_email.get(),
             'Disponível': self.radio_availability.get(),
         }
@@ -408,7 +408,7 @@ class Application:
         self.txt_nif.delete(0, END)
         self.txt_cc.delete(0, END)
         self.entry_cc_exp.delete(0, END)
-        self.entry_calendar.delete(0, END)
+        self.entry_birthday.delete(0, END)
         self.txt_email.delete(0, END)
     
     def fill_fields(self):
@@ -430,7 +430,7 @@ class Application:
         self.txt_cc.delete(0, END)
         self.txt_cc.insert(0, self.user.cc)
         self.entry_cc_exp.set_date(self.user.cc_exp)
-        self.entry_calendar.set_date(self.user.calendar_date)
+        self.entry_birthday.set_date(self.user.birthday_date)
         self.txt_email.delete(0, END)
         self.txt_email.insert(0, self.user.email)
         self.radio_availability.set("Sim")
@@ -450,5 +450,5 @@ if __name__ == '__main__':
         app = Application(root)
         root.title('Nova Direita - Gestão de Militantes')
         root.geometry('800x790')
-        root.iconbitmap(icon)
+        # root.iconbitmap(icon)
         root.mainloop()
