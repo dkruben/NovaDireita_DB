@@ -18,25 +18,26 @@ from constants import icon, email_body
 from database import banc
 from email_sender import EmailSender
 from terms_conditions import SecondWindow
-from utils import create_militant_table, add_page_number, calculate_militant_per_page, create_district_city_selection, current_dir
-from validators import ZipValidator, EmailValidator, PhoneValidator, CityDistrictValidator, BiCcValidator, NifValidator, ParishValidator
+from utils import create_militant_table, add_page_number, calculate_militant_per_page, create_district_city_parish_selection, current_dir
+from validators import ZipValidator, EmailValidator, PhoneValidator, CityDistrictParishValidator, BiCcValidator, NifValidator
 
 try:
     banc.connect_to_database()
-except mysql.connector.Error as err:
-    wx.MessageBox('Erro', f'Erro ao conectar ao banco de dados: {err}', wx.OK | wx.ICON_ERROR)
+except mysql.connector.Error as error:
+    wx.MessageBox('Erro', f'Erro ao conectar ao banco de dados: {error}', wx.OK | wx.ICON_ERROR)
 
 
 class Application(wx.Frame):
     def __init__(self, parent, title):
         super(Application, self).__init__(parent, title=title, size=(1080, 980))
         self.SetIcon(wx.Icon(icon))
-        
+        # menu variables
         self.name_text = None
         self.address_text = None
         self.parish_text = None
         self.district_combo = None
         self.city_combo = None
+        self.parish_combo = None
         self.zip_text = None
         self.email_text = None
         self.phone_text = None
@@ -46,39 +47,36 @@ class Application(wx.Frame):
         self.comment_text = None
         self.terms_radio = None
         self.birthday_picker = None
-        
+        # panel
         panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)
-        
         self.id_text = wx.TextCtrl(panel, style=wx.TE_READONLY)
         vbox.Add(self.id_text, 0, wx.EXPAND | wx.ALL, 5)
-        
+        # search_militant
         self.search_text = wx.TextCtrl(panel)
         vbox.Add(self.search_text, 0, wx.EXPAND | wx.ALL, 5)
         search_button = wx.Button(panel, label="Procurar Militante")
         search_button.Bind(wx.EVT_BUTTON, self.on_search)
         vbox.Add(search_button, 0, wx.ALL | wx.ALL, 5)
-        
         self.add_input_fields(panel, vbox)
-        
         hbox_buttons = wx.BoxSizer(wx.HORIZONTAL)
-        
+        # add_militant
         save_button = wx.Button(panel, label="Adicionar Dados Militante")
         save_button.Bind(wx.EVT_BUTTON, self.on_save)
         hbox_buttons.Add(save_button, 0, wx.ALL | wx.CENTER, 10)
-        
+        # update_militant
         update_button = wx.Button(panel, label="Atualizar Dados Militante")
         update_button.Bind(wx.EVT_BUTTON, self.on_update)
         hbox_buttons.Add(update_button, 0, wx.ALL | wx.CENTER, 10)
-        
+        # delete_militant
         delete_button = wx.Button(panel, label="Apagar Dados Militante")
         delete_button.Bind(wx.EVT_BUTTON, self.on_delete)
         hbox_buttons.Add(delete_button, 0, wx.ALL | wx.CENTER, 10)
-        
+        # export_pdf
         export_pdf_button = wx.Button(panel, label="Exportar para PDF")
         export_pdf_button.Bind(wx.EVT_BUTTON, self.export_all_to_pdf)
         hbox_buttons.Add(export_pdf_button, 0, wx.ALL | wx.CENTER, 10)
-        
+        # export_exel
         export_xlsx_button = wx.Button(panel, label="Exportar para Excel")
         export_xlsx_button.Bind(wx.EVT_BUTTON, self.export_all_to_xlsx)
         hbox_buttons.Add(export_xlsx_button, 0, wx.ALL | wx.CENTER, 10)
@@ -105,29 +103,28 @@ class Application(wx.Frame):
         self.address_text.SetHint("Formato: Rua de Cima, 123 (1º Esq.)")
         vbox.Add(address_label, 0, wx.ALL, 5)
         vbox.Add(self.address_text, 0, wx.EXPAND | wx.ALL, 5)
-        # freguesia
-        parish_label = wx.StaticText(panel, label="Freguesia:")
-        parish_label.SetFont(font_label)
-        self.parish_text = wx.TextCtrl(panel, validator=ParishValidator())
-        # self.parish_text = wx.TextCtrl(panel)
-        self.parish_text.SetHint("Formato: Nossa Senhora do Socorro")
-        vbox.Add(parish_label, 0, wx.ALL, 5)
-        vbox.Add(self.parish_text, 0, wx.EXPAND | wx.ALL, 5)
-        # distrito e cidade
+        # distrito
         district_label = wx.StaticText(panel, label="Distrito:")
         district_label.SetFont(font_label)
         vbox.Add(district_label, 0, wx.ALL, 5)
-        self.district_combo, self.city_combo = create_district_city_selection(panel)
+        self.district_combo, self.city_combo, self.parish_combo = create_district_city_parish_selection(panel)
         vbox.Add(self.district_combo, 0, wx.ALL | wx.EXPAND, 5)
-        district_validator = CityDistrictValidator()
+        district_validator = CityDistrictParishValidator()
         self.district_combo.SetValidator(district_validator)
         # cidade
         city_label = wx.StaticText(panel, label="Cidade:")
         city_label.SetFont(font_label)
         vbox.Add(city_label, 0, wx.ALL, 5)
         vbox.Add(self.city_combo, 0, wx.ALL | wx.EXPAND, 5)
-        city_validator = CityDistrictValidator()
+        city_validator = CityDistrictParishValidator()
         self.city_combo.SetValidator(city_validator)
+        # freguesia
+        parish_label = wx.StaticText(panel, label="Freguesia:")
+        parish_label.SetFont(font_label)
+        vbox.Add(parish_label, 0, wx.ALL, 5)
+        vbox.Add(self.parish_combo, 0, wx.ALL | wx.EXPAND, 5)
+        parish_validator = CityDistrictParishValidator()
+        self.parish_combo.SetValidator(parish_validator)
         # cod postal
         zip_label = wx.StaticText(panel, label="Código Postal:")
         zip_label.SetFont(font_label)
@@ -209,6 +206,9 @@ class Application(wx.Frame):
         if not self.city_combo.GetValue():
             wx.MessageBox("Por favor, selecione uma cidade", "Erro", wx.OK | wx.ICON_ERROR)
             return False
+        if not self.parish_combo.GetValue():
+            wx.MessageBox("Por favor, selecione uma freguesia", "Erro", wx.OK | wx.ICON_ERROR)
+            return False
         if not self.bi_cc_text.GetValue():
             wx.MessageBox("Por favor, preencha o campo BI/CC", "Erro", wx.OK | wx.ICON_ERROR)
             return False
@@ -233,9 +233,9 @@ class Application(wx.Frame):
             return
         name = self.name_text.GetValue()
         address = self.address_text.GetValue()
-        parish = self.parish_text.GetValue()
         district = self.district_combo.GetValue()
         city = self.city_combo.GetValue()
+        parish = self.parish_text.GetValue()
         zip_code = self.zip_text.GetValue()
         phone = self.phone_text.GetValue()
         bi_cc = self.bi_cc_text.GetValue()
@@ -244,7 +244,7 @@ class Application(wx.Frame):
         birthday = self.birthday_picker.GetValue().FormatISODate()
         terms = self.terms_radio.GetStringSelection()
         try:
-            banc.cursor.execute("INSERT INTO militantes (name, address, parish, district, city, zip_code, phone, bi_cc, nif, email, birthday, agreement) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (name, address, parish, district, city, zip_code, phone, bi_cc, nif, email, birthday, terms))
+            banc.cursor.execute("INSERT INTO militantes (name, address, district, city, parish, zip_code, phone, bi_cc, nif, email, birthday, agreement) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (name, address, district, city, parish, zip_code, phone, bi_cc, nif, email, birthday, terms))
             banc.connection.commit()
             wx.MessageBox('Dados inseridos com sucesso!', 'Info', wx.OK | wx.ICON_INFORMATION)
             subject = "Inscrição Militante - Nova Direita"
@@ -253,9 +253,9 @@ class Application(wx.Frame):
             body = message['welcome']
             EmailSender().send_email(subject, body, to_email)
             self.on_clear()
-        except mysql.connector.Error as error:
-            wx.MessageBox(f'Erro ao inserir dados: {error}', 'Erro', wx.OK | wx.ICON_ERROR)
-            print(f'Erro ao inserir dados: {error}')
+        except mysql.connector.Error as e:
+            wx.MessageBox(f'Erro ao inserir dados: {e}', 'Erro', wx.OK | wx.ICON_ERROR)
+            print(f'Erro ao inserir dados: {e}')
             banc.connection.rollback()
     
     def on_update(self, event):
@@ -264,9 +264,9 @@ class Application(wx.Frame):
         id_value = self.id_text.GetValue()
         name = self.name_text.GetValue()
         address = self.address_text.GetValue()
-        parish = self.parish_text.GetValue()
         district = self.district_combo.GetValue()
         city = self.city_combo.GetValue()
+        parish = self.parish_text.GetValue()
         zip_code = self.zip_text.GetValue()
         phone = self.phone_text.GetValue()
         bi_cc = self.bi_cc_text.GetValue()
@@ -276,7 +276,7 @@ class Application(wx.Frame):
         terms = self.terms_radio.GetStringSelection()
         
         try:
-            banc.cursor.execute("UPDATE militantes SET name=%s, address=%s, parish=%s, district=%s, city=%s, zip_code=%s, phone=%s, bi_cc=%s, nif=%s, email=%s, birthday=%s, agreement=%s WHERE militant=%s", (name, address, parish, district, city, zip_code, phone, bi_cc, nif, email, birthday, terms, id_value))
+            banc.cursor.execute("UPDATE militantes SET name=%s, address=%s, district=%s, city=%s, parish=%s, zip_code=%s, phone=%s, bi_cc=%s, nif=%s, email=%s, birthday=%s, agreement=%s WHERE militant=%s", (name, address, district, city, parish, zip_code, phone, bi_cc, nif, email, birthday, terms, id_value))
             banc.connection.commit()
             wx.MessageBox('Dados atualizados com sucesso!', 'Info', wx.OK | wx.ICON_INFORMATION)
             subject = "Alteração de dados de Militante - Nova Direita"
@@ -285,8 +285,8 @@ class Application(wx.Frame):
             body = message['update']
             EmailSender().send_email(subject, body, to_email)
             self.on_clear()
-        except mysql.connector.Error as error:
-            wx.MessageBox(f'Erro ao atualizar dados: {error}', 'Erro', wx.OK | wx.ICON_ERROR)
+        except mysql.connector.Error as e:
+            wx.MessageBox(f'Erro ao atualizar dados: {e}', 'Erro', wx.OK | wx.ICON_ERROR)
             banc.connection.rollback()
     
     def on_delete(self, event):
@@ -296,8 +296,8 @@ class Application(wx.Frame):
             banc.connection.commit()
             wx.MessageBox('Dados apagados com sucesso!', 'Info', wx.OK | wx.ICON_INFORMATION)
             self.on_clear()
-        except mysql.connector.Error as error:
-            wx.MessageBox(f'Erro ao apagar dados: {error}', 'Erro', wx.OK | wx.ICON_ERROR)
+        except mysql.connector.Error as e:
+            wx.MessageBox(f'Erro ao apagar dados: {e}', 'Erro', wx.OK | wx.ICON_ERROR)
             banc.connection.rollback()
     
     def on_search(self, event):
@@ -313,8 +313,8 @@ class Application(wx.Frame):
                 self.populate_form_with_data(result)
             else:
                 wx.MessageBox("Militante não encontrado.", "Resultado da pesquisa", wx.OK | wx.ICON_ERROR)
-        except mysql.connector.Error as error:
-            wx.MessageBox(f"Erro ao pesquisar dados: {error}", "Erro", wx.OK | wx.ICON_ERROR)
+        except mysql.connector.Error as e:
+            wx.MessageBox(f"Erro ao pesquisar dados: {e}", "Erro", wx.OK | wx.ICON_ERROR)
     
     def populate_form_with_data(self, result):
         if result:
@@ -331,10 +331,8 @@ class Application(wx.Frame):
             # Check if bi_cc is not None before setting its value
             if bi_cc is not None:
                 self.bi_cc_text.SetValue(bi_cc)
-            
             self.nif_text.SetValue(nif)
             self.email_text.SetValue(email)
-            
             if isinstance(birthday, datetime.date):
                 birthday_str = birthday.strftime("%d-%m-%Y")
             else:
@@ -344,10 +342,8 @@ class Application(wx.Frame):
                 self.birthday_picker.SetValue(wx.DateTime.FromDMY(day, month - 1, year))
             except (ValueError, AttributeError) as e:
                 print(f"Erro ao processar a data de nascimento: {e}")
-            
             agreement_map = {"Sim": 0, "Não": 1}
             agreement_index = agreement_map.get(agreement, -1)
-            
             if agreement_index != -1:
                 self.terms_radio.SetSelection(agreement_index)
             else:
@@ -409,8 +405,8 @@ class Application(wx.Frame):
             doc.build(elements, onFirstPage=add_page_number, onLaterPages=add_page_number)
             wx.MessageBox(f'Dados exportados com sucesso para {pdf_file}', 'Info', wx.OK | wx.ICON_INFORMATION)
         
-        except mysql.connector.Error as error:
-            wx.MessageBox(f'Erro ao exportar dados: {error}', 'Erro', wx.OK | wx.ICON_ERROR)
+        except mysql.connector.Error as e:
+            wx.MessageBox(f'Erro ao exportar dados: {e}', 'Erro', wx.OK | wx.ICON_ERROR)
     
     @staticmethod
     def export_all_to_xlsx(event):
@@ -433,8 +429,8 @@ class Application(wx.Frame):
                 ws.append(row)
             wb.save(xlsx_file)
             wx.MessageBox(f'Dados exportados com sucesso para {xlsx_file}', 'Info', wx.OK | wx.ICON_INFORMATION)
-        except mysql.connector.Error as error:
-            wx.MessageBox(f'Erro ao exportar dados: {error}', 'Erro', wx.OK | wx.ICON_ERROR)
+        except mysql.connector.Error as e:
+            wx.MessageBox(f'Erro ao exportar dados: {e}', 'Erro', wx.OK | wx.ICON_ERROR)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import re
 import wx
-from constants import councils_options
+from constants import select_options
 
 
 # Modify the Validate method in BaseValidator class to pass the value of the TextCtrl object
@@ -16,13 +16,6 @@ class BaseValidator(wx.Validator):
         return True
 
 
-class ParishValidator(BaseValidator):
-    field_name = "Freguesia"
-    
-    def is_valid(self, value):
-        return bool(re.match(r'^[A-Za-zÀ-ÿ\s\-]', value))
-
-
 class ZipValidator(BaseValidator):
     field_name = "Código Postal"
     
@@ -30,14 +23,19 @@ class ZipValidator(BaseValidator):
         return bool(re.match(r'\d{4}-\d{3}', value))
 
 
-class CityDistrictValidator(BaseValidator):
-    field_name = "Cidade e/ou Distrito"
-
+class CityDistrictParishValidator(BaseValidator):
+    field_name = "Cidade e/ou Distrito e/ou Freguesia"
+    
     def is_valid(self, value):
         trimmed_value = value.strip()
         if not trimmed_value:
             return False
-        valid_options = list(councils_options.keys()) + [city for district in councils_options.values() for city in district]
+        
+        valid_options = list(select_options.keys())
+        valid_options += [parish for city in select_options.values() for parish in city]
+        valid_options += [city for district in select_options.values() for city in district]
+        valid_options += [district for district in select_options.values()]
+        
         return trimmed_value in valid_options
 
 

@@ -5,7 +5,7 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.platypus import Table, TableStyle
 
-from constants import councils_options
+from constants import select_options
 
 # Get the directory of the current script
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -39,13 +39,14 @@ def create_militant_table(row):
         ["Freguesia:", row[3]],
         ["Distrito:", row[4]],
         ["Cidade:", row[5]],
-        ["Código Postal:", row[6]],
-        ["Telefone:", row[7]],
-        ['BI/CC', row[8]],
-        ['NIF', row[9]],
-        ["Email:", row[10]],
-        ["Data de Nascimento:", row[11]],
-        ["Aceita os Termos:", row[12]]
+        ["Frguesia:", row[6]],
+        ["Código Postal:", row[7]],
+        ["Telefone:", row[8]],
+        ['BI/CC', row[9]],
+        ['NIF', row[10]],
+        ["Email:", row[11]],
+        ["Data de Nascimento:", row[12]],
+        ["Aceita os Termos:", row[13]]
     ]
     table = Table(data, colWidths=[100, 300])
     table.setStyle(TableStyle([
@@ -61,16 +62,33 @@ def create_militant_table(row):
     return table
 
 
-def create_district_city_selection(parent):
-    district_choices = list(councils_options.keys())
-    city_choices = []
+def create_district_city_parish_selection(parent):
+    district_choices = list(select_options.keys())
+    city_choices = list(select_options.get(district_choices[0], {}).keys()) if district_choices else []
+    parish_choices = select_options.get(district_choices[0], {}).get(city_choices[0], []) if city_choices else []
+
     district_combo = wx.ComboBox(parent, choices=district_choices, style=wx.CB_READONLY)
     city_combo = wx.ComboBox(parent, choices=city_choices, style=wx.CB_READONLY)
-    
+    parish_combo = wx.ComboBox(parent, choices=parish_choices, style=wx.CB_READONLY)
+
     def on_district_select(event):
         selected_district = district_combo.GetValue()
         city_combo.Clear()
-        city_combo.AppendItems(councils_options.get(selected_district, []))
-    
+        city_choices = list(select_options.get(selected_district, {}).keys())
+        city_combo.AppendItems(city_choices)
+        city_combo.SetValue('')  # Clear city selection
+        parish_combo.Clear()
+        parish_combo.SetValue('')  # Clear parish selection
+
+    def on_city_select(event):
+        selected_district = district_combo.GetValue()
+        selected_city = city_combo.GetValue()
+        parish_combo.Clear()
+        parish_choices = select_options.get(selected_district, {}).get(selected_city, [])
+        parish_combo.AppendItems(parish_choices)
+        parish_combo.SetValue('')  # Clear parish selection
+
     district_combo.Bind(wx.EVT_COMBOBOX, on_district_select)
-    return district_combo, city_combo
+    city_combo.Bind(wx.EVT_COMBOBOX, on_city_select)
+
+    return district_combo, city_combo, parish_combo
