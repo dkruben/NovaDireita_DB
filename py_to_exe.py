@@ -10,7 +10,7 @@ icon_dir = os.path.join('src_files', 'logos', 'logo.ico')
 def generate_exe():
     opts = [
         '--name=Nova Direita',
-        'python_src/main.py',
+        'python_src_3/main.py',
         '--onefile',
         '--windowed',
         '--hidden-import=pymysql',

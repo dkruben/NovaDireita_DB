@@ -35,3 +35,4 @@ python_src_2/__pycache__/email_sender.cpython-312.pyc
 python_src_2/__pycache__/terms_conditions.cpython-312.pyc
 python_src_2/__pycache__/utils.cpython-312.pyc
 python_src_2/__pycache__/validators.cpython-312.pyc
+*.xml

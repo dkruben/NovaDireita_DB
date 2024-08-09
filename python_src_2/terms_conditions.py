@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import wx
 
-from constants import text_rgpd
+from constants import text_rgpd, icon
 from utils import convert_hex_to_rgb
 
 
 class SecondWindow(wx.Frame):
     def __init__(self, parent, title):
         super(SecondWindow, self).__init__(parent, title=title, size=(500, 400))
+        self.SetIcon(wx.Icon(icon))
         
         panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -35,5 +36,5 @@ class SecondWindow(wx.Frame):
         panel.SetSizer(vbox)
         self.Centre()
     
-    def on_exit(self, _):
+    def on_exit(self, events):
         self.Close()

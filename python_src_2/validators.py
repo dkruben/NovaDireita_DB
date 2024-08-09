@@ -1,10 +1,16 @@
+# -*- coding: utf-8 -*-
 import re
+
 import wx
+
 from constants import select_options
+from utils import convert_hex_to_rgb
 
 
-# Modify the Validate method in BaseValidator class to pass the value of the TextCtrl object
 class BaseValidator(wx.Validator):
+    def __init__(self):
+        super(BaseValidator, self).__init__()
+
     def Validate(self, text_ctrl):
         value = text_ctrl.GetValue()
         if not self.is_valid(value):
@@ -12,8 +18,15 @@ class BaseValidator(wx.Validator):
                 wx.MessageBox(f"Por favor, insira um(a) {self.field_name.lower()} válido(a).", "Erro de Validação", wx.OK | wx.ICON_ERROR)
             else:
                 wx.MessageBox("Por favor, insira um valor válido.", "Erro de Validação", wx.OK | wx.ICON_ERROR)
+            text_ctrl.SetBackgroundColour(wx.Colour(convert_hex_to_rgb('#FFC8C8')))
+            text_ctrl.SetFocus()
             return False
+        else:
+            text_ctrl.SetBackgroundColour(wx.NullColour)
         return True
+
+    def is_valid(self, value):
+        raise NotImplementedError("Subclasses devem implementar o método is_valid.")
 
 
 class ZipValidator(BaseValidator):
@@ -55,9 +68,9 @@ class PhoneValidator(BaseValidator):
 
 class BiCcValidator(BaseValidator):
     field_name = "BI/CC"
-    
+
     def is_valid(self, value):
-        return bool(re.match(r'^\d{8} \d[A-Z]{2} \d$', value))
+        return bool(re.match(r'^\d{8} \d [A-Z]{2}\d', value))
 
 
 class NifValidator(BaseValidator):

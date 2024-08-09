@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['python_src\\main.py'],
+    ['python_src_3\\main.py'],
     pathex=[],
     binaries=[],
     datas=[('src_files\\logos\\logo.ico', 'icon'), ('version.txt', '.')],
